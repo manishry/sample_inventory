@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
-//use App\Categories;
+
 use App\Category;
 use App\Properties;
 use Illuminate\Http\Request;
@@ -13,19 +13,19 @@ use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
+  protected $cat;
    protected $properties;
    protected $categories_properties;
-   protected $category;
+  
 
-    public function __construct(
-            Properties $Properties ,
-            CategoriesProperties $categories_properties,
-            Category $category
-          )
+    public function __construct(Properties $Properties, CategoriesProperties $categories_properties, Category $cat)
     {
-        $this->Properties = $Properties;
+      
+        $this->properties = $Properties;
         $this->$categories_properties = $categories_properties;
-        $this->$category = $category;
+        $this->$cat = $cat;
+       
+      
       //  $this->middleware('auth');
     }
 
@@ -36,7 +36,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        return view('product');
     }
 
 
@@ -152,13 +152,13 @@ class HomeController extends Controller
     return back()->withErrors($validator)->withInput();
   }
 
-  $data = $request->only(['name']);
- // dd($request->all());
-  $create = $this->category->create($data);
+  $data = $request->only('name');
+ 
+  $create = Category::create($data);
 
   if($create) {
-   
-       return redirect('viewcategory');
+    
+       return redirect('view/category');
    }
  }
 

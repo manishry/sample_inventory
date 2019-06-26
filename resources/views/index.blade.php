@@ -3,9 +3,13 @@
 @section('content')
     <div class="container">
             
-             <div class="body-section col-md-6">
-     <button class="btn btn-primary"><a style="text-decoration:none; color:#fff;" href="add/properties"> Add Properties </a></button>
-      <button class="btn btn-primary"><a style="text-aline:right; text-decoration:none; color:#fff;" href="view/category"> View Category </a></button>
+         <div class="body-section col-md-8">
+            <center>
+                  <h1>All Properties</h1>
+            </cetnte>
+        <br>
+            <button class="btn btn-primary" style="margin-left:-600px;"><a style="text-decoration:none; color:#fff;" href="add/properties"> Add Properties </a></button>
+      
           <table class="table" style="margin-top:10px;"> 
              <th>#</th>
              <th>Properties Name</th>
