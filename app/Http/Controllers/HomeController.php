@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 
+use App\Product;
 use App\Category;
 use App\Properties;
 use Illuminate\Http\Request;
@@ -22,8 +23,8 @@ class HomeController extends Controller
     {
       
         $this->properties = $Properties;
-        $this->$categories_properties = $categories_properties;
-        $this->$cat = $cat;
+        $this->categories_properties = $categories_properties;
+        $this->categories = $cat;
        
       
       //  $this->middleware('auth');
@@ -36,17 +37,117 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('product');
+       $product = Product::all();
+        return view('Product.product', compact('product'));
+    }
+
+
+    public function ChooseCategory(){
+
+      $categories= Category::all();
+       return view('Product.chooseCategory', compact('categories'));
+
+      
     }
 
 
     // add product 
 
+   public function addproduct(Request $request) {
+
+    
+     $category = Category::all();
+     $category_id = $request->cid;
+     $form = 'create';
+     $props = CategoriesProperties::join('properties as p', 'p.id', '=', 'categories_properties.property_id')
+     ->where('category_id', $request->cid)
+     ->get();
+     return view('Product.add-product', compact('form', 'category_id', 'props','category'));
+   }
+
+
+
+
+  public function create(Request $request)
+   {
+      $category_id = $request->cid;
+       $form = 'create';
+       $props = CategoriesProperties::join('properties as p', 'p.id', '=', 'categories_properties.property_id')
+       ->where('category_id', $request->cid)
+       ->get();
+       return view("Products::create", compact('form', 'category_id', 'props'));
+   }
+   /**
+    * store data in database
+    * upload image
+    *
+    * @param productRequest $request
+    * @return void
+    */
+public function storeproduct(Request $request)
+   {
+
+      
+       $name = $request->input('name');
+      
+       $cat = new Category;
+
+       $data = $request->except('_token','label','value');
+
+      
+       if ($p = $this->categories->create($data)) {
+
+           $ar = [];
+         
+           $labels = $request->label;
+           $values =  $request->value;
+           $pid = $p->id;
+
+  
+           for($i=0; $i < count($labels); $i++){
+               array_push($ar, ['product_id'=>$pid, 'label'=> $labels[$i], 'value'=>$values[$i]]);
+
+           }
+           DB::table('products_properties')->insert($ar);
+           return redirect('/');
+       } else {
+           $request->session()->flash('message', 'failed');
+           return view("Products::create");
+       }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Set the product details 
+ 
+  public function setproduct() {
+    $properties = Properties::all();
+    return view ('Product.set-product', compact('properties'));
+  }
+
+
+
+
+
+
+
+
+
     // add properties 
 
     public function addproperties() {
 
-        return view('properties');
+        return view('Properties.properties');
     }
 
     //store properties 
@@ -66,10 +167,10 @@ class HomeController extends Controller
    $data = $request->only(['name']);
    //dd($request->all());
   
-   $create = $this->Properties->create($data);
+   $create = $this->properties->create($data);
    if($create) {
     
-        return redirect('/');
+        return redirect('properties');
     }
   } 
 
@@ -78,18 +179,15 @@ class HomeController extends Controller
   public function viewproperties() {
    $properties = Properties::all();
    
-   return view('index', compact('properties'));
+   return view('Properties.view-properties', compact('properties'));
   }
 
   // edit the properties
 
   public function edit($id){
-    //dd($id);
     $properties =Properties::find($id);
-    
-    
     if(isset($properties)){
-      return view('editproperties', compact('properties'));
+      return view('Properties.editproperties', compact('properties'));
       }
   }
 
@@ -111,7 +209,7 @@ class HomeController extends Controller
     $create = $find->update($data);
     if($create){
      
-      return Redirect('/');
+      return Redirect('Properties.properties');
     }
   }
 
@@ -119,7 +217,7 @@ class HomeController extends Controller
   // delete the properties
 
   public function destroy($id) {
-    $data = $this->Properties->find($id);
+    $data = $this->properties->find($id);
    
 
     if(isset($data)){
@@ -127,7 +225,7 @@ class HomeController extends Controller
         $destroy = $data->destroy($id);
         if($destroy) {
            
-          return Redirect('/');
+          return Redirect('Properties.properties');
         }
       }
   }
@@ -135,7 +233,7 @@ class HomeController extends Controller
 // add new category form
 
  public function addcategory() {
-  return view('view-category');
+  return view('Category.view-category');
 } 
 
  //store category 
@@ -167,7 +265,7 @@ class HomeController extends Controller
  public function viewcategory() {
     $category = Category::all();
    // dd($category);
-  return view('categories', compact('category'));
+  return view('Category.categories', compact('category'));
  }
 
  // Add Properties details 
@@ -182,7 +280,7 @@ class HomeController extends Controller
     array_push($props, $p->property_id);
   }
   
-    return view('setproperties', compact('properties', 'id', 'props'));
+    return view('Properties.setproperties', compact('properties', 'id', 'props'));
 }
 
 

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('index');
+    return view('product');
 });
 
 Auth::routes();
@@ -28,6 +28,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+Route::get('add/product', 'HomeController@addproduct')->name('product');
+Route::post('store/product', 'HomeController@storeproduct')->name('storeproduct');
+Route::get('set/product-details', 'HomeController@setproduct')->name('setproduct');
 Route::get('set/properties/{id}', 'HomeController@setproperties');
 Route::get('add/properties', 'HomeController@addproperties');
 Route::post('store/properties', 'HomeController@storeproperties');
@@ -40,3 +43,5 @@ Route::post('add/properties/details', 'HomeController@addpropertiesdetails');
 Route::get('add/category', 'HomeController@addcategory')->name('add');
 Route::post('store/category', 'Homecontroller@storecategory')->name('store');
 Route::get('/', 'HomeController@index');
+
+Route::get('chooseCategory','Homecontroller@ChooseCategory');
