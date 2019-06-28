@@ -26,13 +26,13 @@
                 <tr>
                    <td>{{ $id++ }}</td>
                    <td>{{ $p->name }}</td>
-                   <td>{{ $p->category_id }}</td>
+                   <td>{{ $p->name }}</td>
                     <td>
 
-                    <a href="{{route('setproduct')}}" class="btn btn-sm btn-success">Set Product Details</a>
-                    <a href="#" class="btn btn-sm btn-info">View Product Details</a>
-                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                     <a href="#" class="btn btn-sm btn-danger">Del</a>
+                    
+                    <a href="{{url('view/product-details/' .$p->id )}}" class="btn btn-sm btn-info">View Product Details</a>
+                    {{-- <a href="{{url('edit/product/' .$p->id)}}" class="btn btn-sm btn-primary">Edit</a>
+                     <a href="{{url('del/product/' .$p->id)}}" class="btn btn-sm btn-danger">Del</a> --}}
                    </td>
                 </tr>
              @endforeach

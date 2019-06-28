@@ -17,7 +17,7 @@
                     </div>
                   
 
-                  <button class="btn btn-primary">Add</button>
+                  <button class="btn btn-primary">Update</button>
                 </form>
             </div>
 

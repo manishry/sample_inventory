@@ -24,13 +24,12 @@
                 <tr>
                    <td><?php echo e($id++); ?></td>
                    <td><?php echo e($p->name); ?></td>
-                   <td><?php echo e($p->category_id); ?></td>
+                   <td><?php echo e($p->name); ?></td>
                     <td>
 
-                    <a href="<?php echo e(route('setproduct')); ?>" class="btn btn-sm btn-success">Set Product Details</a>
-                    <a href="#" class="btn btn-sm btn-info">View Product Details</a>
-                    <a href="#" class="btn btn-sm btn-primary">Edit</a>
-                     <a href="#" class="btn btn-sm btn-danger">Del</a>
+                    
+                    <a href="<?php echo e(url('view/product-details/' .$p->id )); ?>" class="btn btn-sm btn-info">View Product Details</a>
+                    
                    </td>
                 </tr>
              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

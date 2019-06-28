@@ -45,3 +45,7 @@ Route::post('store/category', 'Homecontroller@storecategory')->name('store');
 Route::get('/', 'HomeController@index');
 
 Route::get('chooseCategory','Homecontroller@ChooseCategory');
+Route::get('view/product-details/{id}','HomeController@viewproduct')->name('viewproduct');
+Route::get('edit/category/{id}', 'HomeController@editcategory');
+Route::get('del/category/{id}', 'HomeController@deletecategory');
+Route::post('update/category/{id}', 'HomeController@updatecategory');

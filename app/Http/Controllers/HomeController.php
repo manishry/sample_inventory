@@ -7,6 +7,7 @@ use DB;
 use App\Product;
 use App\Category;
 use App\Properties;
+use App\ProductProperties;
 use Illuminate\Http\Request;
 use App\CategoriesProperties;
 use Illuminate\Support\Facades\Session;
@@ -17,12 +18,14 @@ class HomeController extends Controller
   protected $cat;
    protected $properties;
    protected $categories_properties;
+   protected $products;
   
 
-    public function __construct(Properties $Properties, CategoriesProperties $categories_properties, Category $cat)
+    public function __construct(Properties $Properties, Product $products, CategoriesProperties $categories_properties, Category $cat)
     {
       
         $this->properties = $Properties;
+        $this->products = $products;
         $this->categories_properties = $categories_properties;
         $this->categories = $cat;
        
@@ -38,6 +41,8 @@ class HomeController extends Controller
     public function index()
     {
        $product = Product::all();
+
+      
         return view('Product.product', compact('product'));
     }
 
@@ -65,9 +70,6 @@ class HomeController extends Controller
      return view('Product.add-product', compact('form', 'category_id', 'props','category'));
    }
 
-
-
-
   public function create(Request $request)
    {
       $category_id = $request->cid;
@@ -77,25 +79,27 @@ class HomeController extends Controller
        ->get();
        return view("Products::create", compact('form', 'category_id', 'props'));
    }
-   /**
-    * store data in database
-    * upload image
-    *
-    * @param productRequest $request
-    * @return void
-    */
+  
 public function storeproduct(Request $request)
    {
-
+    $validator = Validator::make($request->all(), [
+      'name'=> 'required',
+      
+    ]);
+ 
+    if($validator->fails()){
+    
+      return back()->withErrors($validator)->withInput();
+    }
       
        $name = $request->input('name');
       
-       $cat = new Category;
+       $product = new Product;
 
        $data = $request->except('_token','label','value');
 
       
-       if ($p = $this->categories->create($data)) {
+       if ($p = $this->products->create($data)) {
 
            $ar = [];
          
@@ -116,32 +120,34 @@ public function storeproduct(Request $request)
        }
    }
 
+   // edit product
 
+   public function editproduct($id) {
+    $pp =ProductProperties::find($id);
+  
+    if(isset($pp)){
+      return view('Properties.editproperties', compact('pp'));
+      }
+   }
 
+   // update product 
 
+   public function updateproduct(Request $request , $id) {
 
+   }
 
+   // delete product 
 
-
-
-
-
-
+   public function deleteproduct($id) {
+              
+   }
 
  // Set the product details 
  
-  public function setproduct() {
-    $properties = Properties::all();
-    return view ('Product.set-product', compact('properties'));
+  public function viewproduct($id) {
+    $productdetails = ProductProperties::find($id);
+    return view ('Product.product-details', compact('productdetails'));
   }
-
-
-
-
-
-
-
-
 
     // add properties 
 
@@ -209,7 +215,7 @@ public function storeproduct(Request $request)
     $create = $find->update($data);
     if($create){
      
-      return Redirect('Properties.properties');
+      return Redirect('properties');
     }
   }
 
@@ -225,7 +231,7 @@ public function storeproduct(Request $request)
         $destroy = $data->destroy($id);
         if($destroy) {
            
-          return Redirect('Properties.properties');
+          return redirect('properties');
         }
       }
   }
@@ -260,6 +266,54 @@ public function storeproduct(Request $request)
    }
  }
 
+ //edit category 
+
+ public function editcategory($id) {
+  $category =Category::find($id);
+  //dd($category);
+  if(isset($category)){
+    return view('Category.editcategory', compact('category'));
+    }
+ }
+
+ // update category
+
+ public function updatecategory(Request $request, $id) {
+  $validator = Validator::make($request->all(), [
+    'name'=> 'required',
+  ]);
+
+  if($validator->fails()){
+  
+    return back()->withErrors($validator)->withInput();
+  }
+
+  $data = $request->only(['name']);
+  $find = $this->categories->find($request->id);
+
+  $create = $find->update($data);
+  if($create){
+   
+    return Redirect('view/category');
+  }
+ }
+
+
+ // delete category
+
+ public function deletecategory($id) {
+  $data = $this->categories->find($id);
+   
+
+  if(isset($data)){
+      
+      $destroy = $data->destroy($id);
+      if($destroy) {
+         
+        return redirect('view/category');
+      }
+    }
+ }
  // view category name 
 
  public function viewcategory() {
@@ -317,7 +371,7 @@ public function storeproduct(Request $request)
       }else{
         Session::flash("message", "process failed");
       }
-      return redirect()->back();
+      return Redirect ('view/category');
        
       
  }
