@@ -26,7 +26,7 @@
                 <tr>
                    <td>{{ $id++ }}</td>
                    <td>{{ $p->name }}</td>
-                   <td>{{ $p->name }}</td>
+                   <td>{{ $p->categories}}</td>
                     <td>
 
                     

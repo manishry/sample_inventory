@@ -49,3 +49,6 @@ Route::get('view/product-details/{id}','HomeController@viewproduct')->name('view
 Route::get('edit/category/{id}', 'HomeController@editcategory');
 Route::get('del/category/{id}', 'HomeController@deletecategory');
 Route::post('update/category/{id}', 'HomeController@updatecategory');
+Route::get('edit/product/{id}', 'HomeController@editproduct');
+Route::post('update/product/{id}', 'HomeController@updateproduct');
+Route::get('del/product/{id}', 'Homecontroller@deleteproduct');

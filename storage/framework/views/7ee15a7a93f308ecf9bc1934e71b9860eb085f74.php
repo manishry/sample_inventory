@@ -5,17 +5,20 @@
         <div class="card-body">
             <div class="table">
                 <table class="table">
+                
+                
                     <tbody>
-                     
+                     <?php if($productdetails): ?>
+                     <?php $__currentLoopData = $productdetails; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pd): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td style="font-weight:bold; font-size:16px;">Properties Name</td>
-                            <td>Name Details</td>
+                            <td style="font-weight:bold; font-size:16px;"><?php echo e($pd->label); ?></td>
+                            <td><?php echo e($pd->value); ?></td>
                         </tr>
-                        <tr>
-                            <td style="font-weight:bold; font-size:16px;">Properties Name</td>
-                            <td>Name Details</td>
-                        </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
+                        
                     </tbody>
+                    
                 </table>
             </div>
         </div>

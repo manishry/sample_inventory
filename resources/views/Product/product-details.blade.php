@@ -7,17 +7,20 @@
         <div class="card-body">
             <div class="table">
                 <table class="table">
+                
+                
                     <tbody>
-                     
+                     @if($productdetails)
+                     @foreach($productdetails as $pd)
                         <tr>
-                            <td style="font-weight:bold; font-size:16px;">Properties Name</td>
-                            <td>Name Details</td>
+                            <td style="font-weight:bold; font-size:16px;">{{$pd->label}}</td>
+                            <td>{{$pd->value}}</td>
                         </tr>
-                        <tr>
-                            <td style="font-weight:bold; font-size:16px;">Properties Name</td>
-                            <td>Name Details</td>
-                        </tr>
+                        @endforeach
+                        @endif
+                        
                     </tbody>
+                    
                 </table>
             </div>
         </div>

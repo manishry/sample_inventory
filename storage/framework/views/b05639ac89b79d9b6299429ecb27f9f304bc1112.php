@@ -24,7 +24,7 @@
                 <tr>
                    <td><?php echo e($id++); ?></td>
                    <td><?php echo e($p->name); ?></td>
-                   <td><?php echo e($p->name); ?></td>
+                   <td><?php echo e($p->categories); ?></td>
                     <td>
 
                     

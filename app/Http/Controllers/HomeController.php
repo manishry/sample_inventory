@@ -40,8 +40,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-       $product = Product::all();
-
+      
+      $product = DB::table("products as p")->select("p.*","c.name as categories")
+      ->join('categories as c', 'p.category_id', '=', 'c.id')
+      ->get();
+      
       
         return view('Product.product', compact('product'));
     }
@@ -145,8 +148,11 @@ public function storeproduct(Request $request)
  // Set the product details 
  
   public function viewproduct($id) {
-    $productdetails = ProductProperties::find($id);
+    
+    $productdetails = ProductProperties::whereProductId($id)->get();
+    
     return view ('Product.product-details', compact('productdetails'));
+    
   }
 
     // add properties 
